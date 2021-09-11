@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class FeedbackScript : MonoBehaviour { 
 
     public GameObject[] questionGroupArr;
-    public QAClass[] qaArr;
+    public QAClass[] answersArr;
 
     // Start is called before the first frame update
     void Start()
     {
-        qaArr = new QAClass[questionGroupArr.Length];
+        answersArr = new QAClass[questionGroupArr.Length];
     }
 
     // Update is called once per frame
@@ -23,25 +23,22 @@ public class FeedbackScript : MonoBehaviour {
     //Called when user clicks the submit button
     public void SubmitAnswer()
     {
-        for(int i = 0; i < qaArr.Length; i++){
-            qaArr[i] = ReadQA(questionGroupArr[i]);
+        for(int i = 0; i < answersArr.Length; i++){
+            answersArr[i] = ReadQA(questionGroupArr[i]);
         }
     }
 
-    QAClass ReadQA(GameObject questionGroup)
+    public QAClass ReadQA(GameObject questionGroup)
     {
         QAClass result = new QAClass();
-        GameObject q = questionGroup.transform.Find("Question").gameObject;
         GameObject a = questionGroup.transform.Find("Answer").gameObject;
-
-        result.Question = q.GetComponent<Text>().text;
 
         if(a.GetComponent<ToggleGroup>() != null) { 
             for(int i = 0; i < a.transform.childCount; i++)
             {
                 if (a.transform.GetChild(i).GetComponent<Toggle>().isOn)
                 {
-                    result.Answer = a.transform.GetChild(i).Find("Label").GetComponent<Text>().text;
+                    result.Answer = (i-1).ToString();
                     break;
                 }
             }
@@ -57,7 +54,6 @@ public class FeedbackScript : MonoBehaviour {
     [System.Serializable]
     public class QAClass
     {
-        public string Question = "";
-        public string Answer = "";
+        public string Answer;
     }
 }
